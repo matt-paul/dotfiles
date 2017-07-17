@@ -44,3 +44,18 @@ _load_settings "$HOME/.zsh/configs"
 
 # aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
+
+plugins=(git cloudapp node npm bower brew osx extract z)
+
+# include Z, yo
+. ~/z.sh
+
+export NVM_DIR="/Users/matt/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+PYTHONPATH="${PYTHONPATH}:/Users/matt/Projects/seenit/libseenit"
+export PYTHONPATH
+
+export EVENT_NOKQUEUE=1
+alias ls='ls -GpF'
+alias v='vim'

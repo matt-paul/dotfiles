@@ -1,9 +1,9 @@
-" Leader
 let mapleader = " "
 
 set backspace=2   " Backspace deletes like most programs in insert mode
 set nobackup
 set nowritebackup
+set backupcopy=yes
 set noswapfile    " http://robots.thoughtbot.com/post/18739402579/global-gitignore#comment-458413287
 set history=50
 set ruler         " show the cursor position all the time
@@ -50,6 +50,8 @@ augroup END
 " shell for syntax highlighting purposes.
 let g:is_posix = 1
 
+let g:flow#enable = 0
+
 " Softtabs, 2 spaces
 set tabstop=2
 set shiftwidth=2
@@ -58,6 +60,9 @@ set expandtab
 
 " Display extra whitespace
 set list listchars=tab:»·,trail:·,nbsp:·
+
+" Strip Whitespace
+nnoremap <leader>ws :StripWhitespace<CR>
 
 " Use one space, not two, after punctuation.
 set nojoinspaces
@@ -79,13 +84,10 @@ if executable('ag')
   endif
 endif
 
-" Make it obvious where 80 characters is
-set textwidth=80
-set colorcolumn=+1
-
 " Numbers
 set number
 set numberwidth=5
+set relativenumber
 
 " Tab completion
 " will insert tab at beginning of line,
@@ -105,52 +107,89 @@ inoremap <S-Tab> <c-n>
 " Switch between the last two files
 nnoremap <leader><leader> <c-^>
 
-" Get off my lawn
-nnoremap <Left> :echoe "Use h"<CR>
-nnoremap <Right> :echoe "Use l"<CR>
-nnoremap <Up> :echoe "Use k"<CR>
-nnoremap <Down> :echoe "Use j"<CR>
-
-" vim-test mappings
-nnoremap <silent> <Leader>t :TestFile<CR>
-nnoremap <silent> <Leader>s :TestNearest<CR>
-nnoremap <silent> <Leader>l :TestLast<CR>
-nnoremap <silent> <Leader>a :TestSuite<CR>
-nnoremap <silent> <leader>gt :TestVisit<CR>
-
 " Run commands that require an interactive shell
 nnoremap <Leader>r :RunInInteractiveShell<space>
 
-" Treat <li> and <p> tags like the block tags they are
-let g:html_indent_tags = 'li\|p'
 
-" Open new split panes to right and bottom, which feels more natural
+"MATTS ADDITIONS
+"This is the new place for stuff, only add stuff to this one
+"
+map <C-n> :NERDTreeToggle<CR>
+
+
+set statusline+=%#warningmsg#
+set statusline+=%*
+
+""Move between splits
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+"Open new split panes to right and bottom which feels more natural
 set splitbelow
 set splitright
 
-" Quicker window movement
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-h> <C-w>h
-nnoremap <C-l> <C-w>l
 
-" configure syntastic syntax checking to check on open as well as save
-let g:syntastic_check_on_open=1
-let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
-let g:syntastic_eruby_ruby_quiet_messages =
-    \ {"regex": "possibly useless use of a variable in void context"}
+" Make it obvious where 80 characters is
+set textwidth=80
+set colorcolumn=+1
+set cursorline    " highlight the current line the cursor is on
 
-" Set spellfile to location that is guaranteed to exist, can be symlinked to
-" Dropbox or kept in Git and managed outside of thoughtbot/dotfiles using rcm.
-set spellfile=$HOME/.vim-spell-en.utf-8.add
+let mapleader = "\<Space>"
+set spelllang=en_gb
 
-" Autocomplete with dictionary words when spell check is on
-set complete+=kspell
+" Indentation
+nnoremap <Leader>i gg=G``
+nnoremap == gg=G``
 
-" Always use vertical diffs
-set diffopt+=vertical
 
-" Local config
-if filereadable($HOME . "/.vimrc.local")
-  source ~/.vimrc.local
-endif
+"Enable mouse
+set mouse=a
+"set to name of terminal
+set ttymouse=xterm2
+
+
+map <D-S-]> gt
+map <D-S-[> gT
+map <D-1> 1gt
+map <D-2> 2gt
+map <D-3> 3gt
+map <D-4> 4gt
+map <D-5> 5gt
+map <D-6> 6gt
+map <D-7> 7gt
+map <D-8> 8gt
+map <D-9> 9gt
+map <D-0> :tablast<CR>
+
+"Emmet
+let g:user_emmet_leader_key=','
+
+"open vimrc
+nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<cr>
+
+" source vimrc
+nnoremap <leader>es :so $MYVIMRC
+
+"make ctrl-c work with vim on a mac
+vnoremap <C-c> :w !pbcopy<CR><CR> noremap <C-v> :r !pbpaste<CR><CR>
+
+"autosave when focus lost
+:au FocusLost * :wa
+
+set ignorecase
+set smartcase
+" save automatically when text is changed
+set updatetime=200
+au CursorHold * silent! update
+
+" Two keyletter search EasyMotion
+nmap s <Plug>(easymotion-s2)
+
+" " such very magic
+:nnoremap / /\v
+:cnoremap %s/ %s/\v"
+
+"Jsx highlighting with .js files
+let g:jsx_ext_required = 0
